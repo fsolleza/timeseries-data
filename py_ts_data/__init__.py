@@ -1,12 +1,15 @@
 import os
-import py
+from . import utils
 import json
 
 def path():
-    with open(os.path.join(os.path.dirname(__file__), "PATH"), "r") as f:
+    this_file = __file__
+    path_file_dir = os.path.dirname(os.path.dirname(this_file)) # PATH is parent dir
+    with open(os.path.join(path_file_dir, "PATH"), "r") as f:
         return f.read().rstrip()
 
 PATH = path()
+print("TS-Data path: {}".format(PATH))
 
 def data_info(name):
     """
@@ -27,11 +30,11 @@ def load_data(name):
     test_file = os.path.join(PATH, name, "test")
 
     if info["n_timestamps"] == -1:
-        X_train, y_train = py.parse_variable_length_file(train_file, info)
-        X_test, y_test = py.parse_variable_length_file(test_file, info)
+        X_train, y_train = utils.parse_variable_length_file(train_file, info)
+        X_test, y_test = utils.parse_variable_length_file(test_file, info)
     else:
-        X_train, y_train = py.parse_fixed_length_file(train_file, info)
-        X_test, y_test = py.parse_fixed_length_file(test_file, info)
+        X_train, y_train = utils.parse_fixed_length_file(train_file, info)
+        X_test, y_test = utils.parse_fixed_length_file(test_file, info)
 
     return X_train, y_train, X_test, y_test, info
 
